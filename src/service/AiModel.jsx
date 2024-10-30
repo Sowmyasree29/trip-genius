@@ -1,3 +1,49 @@
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// const apiKey = import.meta.env.VITE_GOOGLE_GEMINI_API;
+// const genAI = new GoogleGenerativeAI(apiKey);
+
+// const model = genAI.getGenerativeModel({
+//   model: "gemini-1.5-flash",
+// });
+
+// const generationConfig = {
+//   temperature: 1,
+//   topP: 0.95,
+//   topK: 64,
+//   maxOutputTokens: 8192,
+//   responseMimeType: "application/json",
+// };
+
+// export const chatSession = model.startChat({
+//   generationConfig,
+//   history: [
+//     {
+//       role: "user",
+//       parts: [
+//         {
+//           text: '"generate travel plan for location:las vegas for 3 days for couple with a cheap budget, give me hotel options list with hotel name, hotel address, price, hotel image url, geo coordinates, rating, description, and suggested itinerary with place name, place details, place image url, geo coordinates, ticket pricing, time to travel each of the locations for 3 days, with each day plan, and the best time to visit, in JSON format. Include hotel amenities, local transportation info, weather info, and total estimated cost The response data should be strict in Json format"',
+//         },
+//       ],
+//     },
+//     // {
+//     //   role: "model",
+//     //   parts: [
+//     //     {
+//     //       text: '```json\n{\n  "travel_plan": {\n    "location": "Las Vegas, Nevada",\n    "duration": "3 days",\n    "travelers": "Couple",\n    "budget": "Cheap",\n    "hotels": [\n      {\n        "name": "The D Las Vegas",\n        "address": "301 Fremont Street, Las Vegas, NV 89101",\n        "price": "$50 - $80 per night",\n        "image_url": "https://www.the-d.com/media/wysiwyg/The-D-Hotel-Las-Vegas-Exterior.jpg",\n        "geo_coordinates": "36.1695,-115.1428",\n        "rating": "3.5 stars",\n        "description": "A budget-friendly casino hotel in the heart of Fremont Street.",\n        "amenities": ["Casino", "Pool", "Restaurant", "Bar", "Fitness center", "Free Wi-Fi"]\n      }\n    ],\n    "itinerary": [\n      {\n        "day": "Day 1",\n        "plan": [\n          {\n            "time": "Morning",\n            "place": "Fremont Street Experience",\n            "details": "A pedestrian mall with a canopy of LED lights and street performers.",\n            "geo_coordinates": "36.1695,-115.1428",\n            "ticket_pricing": "Free"\n          }\n        ]\n      }\n    ],\n    "local_transportation": "Monorail, ride-sharing, and public buses.",\n    "weather_info": "Hot, dry summers and mild winters.",\n    "estimated_cost": {\n      "total": "$370 - $640"\n    }\n  }\n}\n```'
+//     //     }
+//     //   ]
+//     // }
+//     {
+//       role: "model",
+//       parts: [
+//         {
+//           text: '```json\n{\n  "travel_plan": {\n    "location": "Las Vegas, Nevada",\n    "duration": "3 days",\n    "travelers": "Couple",\n    "budget": "Cheap",\n    "hotels": [\n      {\n        "name": "The D Las Vegas",\n        "address": "301 Fremont Street, Las Vegas, NV 89101",\n        "price": "$50 - $80 per night",\n        "image_url": "https://www.the-d.com/media/wysiwyg/The-D-Hotel-Las-Vegas-Exterior.jpg",\n        "geo_coordinates": "36.1695,-115.1428",\n        "rating": "3.5 stars",\n        "description": "A budget-friendly casino hotel in the heart of Fremont Street.",\n        "amenities": ["Casino", "Pool", "Restaurant", "Bar", "Fitness center", "Free Wi-Fi"]\n      }\n    ],\n    "itinerary": [\n      {\n        "day": "Day 1",\n        "plan": [\n          {\n            "time": "Morning",\n            "place": "Fremont Street Experience",\n            "details": "A pedestrian mall with a canopy of LED lights and street performers.",\n            "geo_coordinates": "36.1695,-115.1428",\n            "ticket_pricing": "Free"\n          }\n        ]\n      }\n    ],\n    "local_transportation": "Monorail, ride-sharing, and public buses.",\n    "weather_info": "Hot, dry summers and mild winters.",\n    "estimated_cost": {\n      "total": "$370 - $640"\n    }\n  }\n}\n```'
+//         }
+//       ]
+//     }
+//   ]
+// });
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = import.meta.env.VITE_GOOGLE_GEMINI_API;
@@ -17,42 +63,93 @@ const generationConfig = {
 
 export const chatSession = model.startChat({
   generationConfig,
-  // safetySettings: Adjust safety settings
-  // See https://ai.google.dev/gemini-api/docs/safety-settings
   history: [
-    // {
-    //   role: "user",
-    //   parts: [
-    //     {
-    //       text: '"generate travel plan for location:las vegas for 3 days for couple with a cheap budget,give me hotels options list with hotel name hotel address,price,hotel image url,geo coordinates,rating,description and suggesr itineray with placename,place details,place image url,geo coordinates,ticket pricing time t travel each of the location for 3 days with each day plan with best time to visit in JSON format,hotel amenites,local transportation info,weather info,total estimated cost" give this in JSON format',
-    //     },
-    //   ],
-    // },
-    // {
-    //   role: "model",
-    //   parts: [
-    //     {
-    //       text: '```json\n{\n  "travel_plan": {\n    "location": "Las Vegas, Nevada",\n    "duration": "3 days",\n    "travelers": "Couple",\n    "budget": "Cheap",\n    "hotels": [\n      {\n        "name": "The D Las Vegas",\n        "address": "301 Fremont Street, Las Vegas, NV 89101",\n        "price": "$50 - $80 per night",\n        "image_url": "https://www.the-d.com/media/wysiwyg/The-D-Hotel-Las-Vegas-Exterior.jpg",\n        "geo_coordinates": "36.1695,-115.1428",\n        "rating": "3.5 stars",\n        "description": "A budget-friendly casino hotel in the heart of Fremont Street. Offers a variety of dining options, a casino, and a pool.",\n        "amenities": [\n          "Casino",\n          "Pool",\n          "Restaurant",\n          "Bar",\n          "Fitness center",\n          "Free Wi-Fi"\n        ]\n      },\n      {\n        "name": "Golden Nugget Las Vegas",\n        "address": "129 E Fremont Street, Las Vegas, NV 89101",\n        "price": "$60 - $100 per night",\n        "image_url": "https://www.goldennugget.com/las-vegas/media/images/hotel-gallery/Golden-Nugget-Las-Vegas-Hotel-Exterior.jpg",\n        "geo_coordinates": "36.1686,-115.1430",\n        "rating": "4 stars",\n        "description": "A historic casino hotel known for its impressive shark tank and lively atmosphere.",\n        "amenities": [\n          "Casino",\n          "Pool",\n          "Restaurant",\n          "Bar",\n          "Spa",\n          "Fitness center",\n          "Free Wi-Fi"\n        ]\n      },\n      {\n        "name": "Circus Circus Hotel & Casino",\n        "address": "2880 Las Vegas Blvd S, Las Vegas, NV 89109",\n        "price": "$40 - $60 per night",\n        "image_url": "https://www.circuscircus.com/media/wysiwyg/Circus-Circus-Hotel-Las-Vegas-Exterior.jpg",\n        "geo_coordinates": "36.1277,-115.1730",\n        "rating": "3 stars",\n        "description": "A family-friendly hotel with a circus theme, featuring a midway, a circus show, and various dining options.",\n        "amenities": [\n          "Casino",\n          "Pool",\n          "Restaurant",\n          "Bar",\n          "Circus show",\n          "Arcade",\n          "Free Wi-Fi"\n        ]\n      }\n    ],\n    "itinerary": [\n      {\n        "day": "Day 1",\n        "plan": [\n          {\n            "time": "Morning (9:00 AM - 12:00 PM)",\n            "place": "Fremont Street Experience",\n            "details": "A pedestrian mall with a canopy of LED lights, street performers, and several casinos. Enjoy the lively atmosphere and take a stroll through the vibrant shops and restaurants.",\n            "image_url": "https://www.fremontstreetexperience.com/media/images/Fremont-Street-Experience-Aerial-View.jpg",\n            "geo_coordinates": "36.1695,-115.1428",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Afternoon (1:00 PM - 4:00 PM)",\n            "place": "The Mob Museum",\n            "details": "Explore the fascinating history of organized crime in Las Vegas. Discover captivating exhibits, artifacts, and interactive displays.",\n            "image_url": "https://www.themobmuseum.org/sites/default/files/styles/hero/public/hero-images/mob-museum-exterior-daytime.jpg",\n            "geo_coordinates": "36.1687,-115.1459",\n            "ticket_pricing": "$25 - $35 per person",\n            "time_to_travel": "2-3 hours"\n          },\n          {\n            "time": "Evening (5:00 PM - 8:00 PM)",\n            "place": "Golden Nugget Casino",\n            "details": "Experience the glitz and glamour of Las Vegas with a visit to the Golden Nugget casino. Try your luck at the tables or slots, and enjoy the live entertainment.",\n            "image_url": "https://www.goldennugget.com/las-vegas/media/images/casino-gallery/Golden-Nugget-Las-Vegas-Casino-Floor.jpg",\n            "geo_coordinates": "36.1686,-115.1430",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          }\n        ]\n      },\n      {\n        "day": "Day 2",\n        "plan": [\n          {\n            "time": "Morning (9:00 AM - 12:00 PM)",\n            "place": "Bellagio Conservatory & Botanical Garden",\n            "details": "Admire stunning floral displays and intricate sculptures in this beautiful botanical garden. It\'s free to enter and a perfect way to escape the desert heat.",\n            "image_url": "https://www.bellagio.com/content/dam/bellagio/images/conservatory/conservatory-gallery/conservatory-gallery-7.jpg",\n            "geo_coordinates": "36.1154,-115.1700",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Afternoon (1:00 PM - 4:00 PM)",\n            "place": "High Roller Observation Wheel",\n            "details": "Enjoy panoramic views of the Las Vegas Strip from the world\'s tallest observation wheel. It\'s a unique and memorable experience.",\n            "image_url": "https://www.caesars.com/content/dam/caesars/las-vegas/attractions/high-roller/high-roller-observation-wheel-day-1.jpg",\n            "geo_coordinates": "36.1134,-115.1723",\n            "ticket_pricing": "$30 - $40 per person",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Evening (5:00 PM - 8:00 PM)",\n            "place": "The LINQ Promenade",\n            "details": "A vibrant outdoor shopping and dining district with a variety of restaurants, bars, and shops. Enjoy the lively atmosphere and street performers.",\n            "image_url": "https://www.thelinq.com/content/dam/thelinq/images/homepage/hero-images/linq-promenade-night.jpg",\n            "geo_coordinates": "36.1152,-115.1720",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          }\n        ]\n      },\n      {\n        "day": "Day 3",\n        "plan": [\n          {\n            "time": "Morning (9:00 AM - 12:00 PM)",\n            "place": "Red Rock Canyon National Conservation Area",\n            "details": "Escape the city and explore the stunning red rock formations, scenic hiking trails, and breathtaking views. It\'s a great way to experience the natural beauty of Nevada.",\n            "image_url": "https://www.nps.gov/redr/learn/nature/images/RedRockCanyon-WideShot_1.jpg",\n            "geo_coordinates": "36.2155,-115.2766",\n            "ticket_pricing": "$15 per vehicle",\n            "time_to_travel": "2-3 hours"\n          },\n          {\n            "time": "Afternoon (1:00 PM - 4:00 PM)",\n            "place": "Neon Museum",\n            "details": "Discover the fascinating history of Las Vegas\'s iconic neon signs. Take a guided tour and see these vibrant relics up close.",\n            "image_url": "https://www.neonmuseum.org/sites/default/files/styles/hero_image/public/neon_museum_exterior_daytime.jpg",\n            "geo_coordinates": "36.1709,-115.1412",\n            "ticket_pricing": "$20 - $30 per person",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Evening (5:00 PM - 8:00 PM)",\n            "place": "Las Vegas Strip",\n            "details": "Walk along the iconic Las Vegas Strip and admire the dazzling lights, towering hotels, and vibrant atmosphere.",\n            "image_url": "https://www.lasvegas.com/media/images/lv_strip_wide_night.jpg",\n            "geo_coordinates": "36.1146,-115.1727",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          }\n        ]\n      }\n    ],\n    "local_transportation": "The Las Vegas Monorail is a convenient option for getting around the Strip. You can also use taxis, ride-sharing services (Uber, Lyft), and the public bus system.",\n    "weather_info": "Las Vegas has a desert climate with hot, dry summers and mild winters. Expect average temperatures in the high 80s to low 100s during the summer months. Temperatures are generally comfortable in the spring and fall.",\n    "estimated_cost": {\n      "hotel": "$150 - $240",\n      "food": "$50 - $75 per day",\n      "attractions": "$50 - $100 per day",\n      "transportation": "$20 - $30 per day",\n      "total": "$370 - $640"\n    }\n  }\n}\n```\n\n**Explanation:**\n\n* **Travel Plan:** Provides basic details about the trip, including location, duration, travelers, budget, and relevant information.\n* **Hotels:** Lists three budget-friendly hotels with details like name, address, price, image, location coordinates, rating, description, and amenities.\n* **Itinerary:** Organizes daily plans for each day, including time, place, details, image, coordinates, ticket prices, and time to travel.\n* **Local Transportation:** Provides information about transportation options in Las Vegas, including the monorail, taxis, ride-sharing services, and public buses.\n* **Weather Info:** Gives general information about Las Vegas weather, including the climate and typical temperatures throughout the year.\n* **Estimated Cost:** Breaks down estimated costs for hotel, food, attractions, and transportation, providing a total estimated budget for the trip.\n\n**Note:**\n\n* Prices for hotels and attractions are approximate and can vary depending on the season and availability.\n* This is just a sample itinerary; you can customize it based on your interests and preferences.\n* Remember to check for any special events or closures before your trip.\n* Always carry cash for tips, small purchases, and places that don\'t accept credit cards.',
-    //     },
-    //   ],
-    // },
     {
       role: "user",
       parts: [
         {
-          "text": "Generate a travel plan for New York City, for 3 days for 2 people with a moderate budget. Provide a list of 10 hotel options including the hotel name, hotel address, price per night, hotel image URL, geo coordinates, rating, description, and amenities. Additionally, suggest a detailed itinerary for 3 days with daily plans including the place name, place details, place image URL, geo coordinates, ticket pricing, time to visit, and best travel time for each location. Include local transportation options and a total estimated cost (hotels, food, attractions, transportation). The output should be strictly in JSON format, with no missing characters or syntax errors that would prevent it from being valid JSON."
-        }
-        
+          text: "generate travel plan for location: las vegas for 3 days for couple with a cheap budget. Provide hotel options in JSON format with the following fields: hotel name, hotel address, price, hotel image URL, geo coordinates, rating, description, and suggested itinerary with place name, place details, place image URL, geo coordinates, ticket pricing, time to travel for each location for 3 days. Include hotel amenities, local transportation info, weather info, and total estimated cost. Ensure the response is strict in JSON format."
+        },
       ],
     },
     {
       role: "model",
       parts: [
         {
-          text: '```json\n{\n  "travel_plan": {\n    "location": "New York City, New York",\n    "duration": "3 days",\n    "travelers": "2 people",\n    "budget": "Moderate",\n    "hotels": [\n      {\n        "name": "The Jane Hotel",\n        "address": "113 Jane Street, New York, NY 10014",\n        "price": "$150 - $250 per night",\n        "image_url": "https://www.thejanenyc.com/images/uploads/general/hero_mobile.jpg",\n        "geo_coordinates": "40.7323,-74.0060",\n        "rating": "4 stars",\n        "description": "A charming boutique hotel in the West Village with a historic maritime theme. Offers cozy rooms, a lively bar, and a convenient location.",\n        "amenities": [\n          "Bar",\n          "Free Wi-Fi",\n          "Concierge service",\n          "Luggage storage"\n        ]\n      },\n      {\n        "name": "The Bowery Hotel",\n        "address": "305 Bowery, New York, NY 10012",\n        "price": "$200 - $350 per night",\n        "image_url": "https://www.theboweryhotel.com/images/home-hero.jpg",\n        "geo_coordinates": "40.7201,-73.9938",\n        "rating": "4.5 stars",\n        "description": "A stylish and modern hotel in the Lower East Side known for its rooftop bar and trendy ambiance.",\n        "amenities": [\n          "Restaurant",\n          "Bar",\n          "Rooftop terrace",\n          "Fitness center",\n          "Free Wi-Fi",\n          "Concierge service"\n        ]\n      },\n      {\n        "name": "The Roosevelt Hotel",\n        "address": "45 E 45th St, New York, NY 10017",\n        "price": "$250 - $400 per night",\n        "image_url": "https://www.theroosevelthotel.com/content/dam/theroosevelt/images/home/hero-image.jpg",\n        "geo_coordinates": "40.7525,-73.9793",\n        "rating": "4 stars",\n        "description": "A grand and historic hotel in Midtown Manhattan, close to Grand Central Terminal and Times Square. Offers elegant rooms, a classic lobby, and a popular bar.",\n        "amenities": [\n          "Restaurant",\n          "Bar",\n          "Fitness center",\n          "Indoor pool",\n          "Free Wi-Fi",\n          "Concierge service"\n        ]\n      }\n    ],\n    "itinerary": [\n      {\n        "day": "Day 1",\n        "plan": [\n          {\n            "time": "Morning (9:00 AM - 12:00 PM)",\n            "place": "Central Park",\n            "details": "Take a stroll through the iconic Central Park, enjoy a picnic, or rent a bike to explore its vast green spaces.",\n            "image_url": "https://www.nycgovparks.org/img/parks/central-park/central-park-1.jpg",\n            "geo_coordinates": "40.7829,-73.9654",\n            "ticket_pricing": "Free",\n            "time_to_travel": "2-3 hours"\n          },\n          {\n            "time": "Afternoon (1:00 PM - 4:00 PM)",\n            "place": "The Metropolitan Museum of Art",\n            "details": "Explore the world-renowned Met, showcasing art from various cultures and periods. Allocate enough time to see its vast collection.",\n            "image_url": "https://www.metmuseum.org/sites/default/files/styles/hero_image/public/images/hero_images/The_Met_The_Roof_Garden.jpg",\n            "geo_coordinates": "40.7794,-73.9632",\n            "ticket_pricing": "Suggested donation of $25 per person",\n            "time_to_travel": "3-4 hours"\n          },\n          {\n            "time": "Evening (6:00 PM - 9:00 PM)",\n            "place": "Times Square",\n            "details": "Experience the dazzling lights and bustling energy of Times Square. Catch a Broadway show or simply enjoy the atmosphere.",\n            "image_url": "https://www.timeout.com/newyork/images/103251622.jpg",\n            "geo_coordinates": "40.7580,-73.9855",\n            "ticket_pricing": "Varies depending on the show",\n            "time_to_travel": "2-3 hours"\n          }\n        ]\n      },\n      {\n        "day": "Day 2",\n        "plan": [\n          {\n            "time": "Morning (9:00 AM - 12:00 PM)",\n            "place": "Statue of Liberty & Ellis Island",\n            "details": "Take a ferry to Liberty Island and see the iconic Statue of Liberty. Explore Ellis Island and learn about the history of immigration to America.",\n            "image_url": "https://www.nps.gov/stli/learn/photosmultimedia/media/Statue-of-Liberty-and-Ellis-Island-from-the-Ferry.jpg",\n            "geo_coordinates": "40.6892,-74.0445",\n            "ticket_pricing": "$30 per person",\n            "time_to_travel": "3-4 hours"\n          },\n          {\n            "time": "Afternoon (1:00 PM - 4:00 PM)",\n            "place": "Brooklyn Bridge",\n            "details": "Walk or bike across the iconic Brooklyn Bridge for stunning views of the Manhattan skyline. You can start from either the Brooklyn or Manhattan side.",\n            "image_url": "https://www.nycgo.com/images/cms/img/17139/shutterstock_684554832.jpg",\n            "geo_coordinates": "40.7028,-74.0060",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Evening (6:00 PM - 9:00 PM)",\n            "place": "Little Italy & Chinatown",\n            "details": "Explore the vibrant neighborhoods of Little Italy and Chinatown, savoring authentic Italian and Chinese cuisine, and browsing the lively markets.",\n            "image_url": "https://www.timeout.com/newyork/images/103133510.jpg",\n            "geo_coordinates": "40.7189,-73.9962",\n            "ticket_pricing": "Varies depending on dining choices",\n            "time_to_travel": "2-3 hours"\n          }\n        ]\n      },\n      {\n        "day": "Day 3",\n        "plan": [\n          {\n            "time": "Morning (9:00 AM - 12:00 PM)",\n            "place": "The High Line",\n            "details": "Stroll along this elevated park built on former railway tracks, offering unique views of the city and interesting art installations.",\n            "image_url": "https://www.thehighline.org/sites/default/files/styles/gallery_featured/public/images/2020/03/high-line-chelsea-market-view.jpg",\n            "geo_coordinates": "40.7484,-74.0059",\n            "ticket_pricing": "Free",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Afternoon (1:00 PM - 4:00 PM)",\n            "place": "Chelsea Market",\n            "details": "Explore this vibrant food hall with a variety of culinary delights, artisanal goods, and unique shops.",\n            "image_url": "https://www.chelseamarket.com/images/uploads/general/hero_mobile.jpg",\n            "geo_coordinates": "40.7417,-74.0043",\n            "ticket_pricing": "Free entry",\n            "time_to_travel": "1-2 hours"\n          },\n          {\n            "time": "Evening (6:00 PM - 9:00 PM)",\n            "place": "Greenwich Village",\n            "details": "Explore the bohemian and historic neighborhood of Greenwich Village, visit Washington Square Park, and enjoy a relaxed dinner in one of its many restaurants.",\n            "image_url": "https://www.nycgo.com/images/cms/img/12569/greenwich-village-washington-square-park-60427308.jpg",\n            "geo_coordinates": "40.7310,-73.9994",\n            "ticket_pricing": "Varies depending on dining choices",\n            "time_to_travel": "2-3 hours"\n          }\n        ]\n      }\n    ],\n    "local_transportation": "New York City has an extensive public transportation system, including the subway, buses, and ferries. You can purchase a MetroCard for unlimited rides or pay per ride. Taxis and ride-sharing services (Uber, Lyft) are also available.",\n    "weather_info": "New York City has a humid continental climate with four distinct seasons. Expect mild to warm summers, cool to cold winters, and pleasant spring and fall seasons. Pack layers as temperatures can fluctuate throughout the day.",\n    "estimated_cost": {\n      "hotel": "$450 - $700",\n      "food": "$100 - $150 per day",\n      "attractions": "$100 - $150 per day",\n      "transportation": "$50 - $75 per day",\n      "total": "$700 - $1175"\n    }\n  }\n}\n```\n\n**Explanation:**\n\n* **Travel Plan:** Provides basic details about the trip, including location, duration, travelers, budget, and relevant information.\n* **Hotels:** Lists three moderate-budget hotels with details like name, address, price, image, location coordinates, rating, description, and amenities.\n* **Itinerary:** Organizes daily plans for each day, including time, place, details, image, coordinates, ticket prices, and time to travel.\n* **Local Transportation:** Provides information about transportation options in New York City, including the subway, buses, ferries, taxis, and ride-sharing services.\n* **Weather Info:** Gives general information about New York City weather, including the climate and typical temperatures throughout the year.\n* **Estimated Cost:** Breaks down estimated costs for hotel, food, attractions, and transportation, providing a total estimated budget for the trip.\n\n**Note:**\n\n* Prices for hotels and attractions are approximate and can vary depending on the season and availability.\n* This is just a sample itinerary; you can customize it based on your interests and preferences.\n* Remember to check for any special events or closures before your trip.\n* Always carry cash for tips, small purchases, and places that don\'t accept credit cards.\n',
-        },
-      ],
-    },
-  ],
+          text: `{
+  "travel_plan": {
+    "location": "Las Vegas, Nevada, USA",
+    "duration": "3 days",
+    "travelers": "Couple",
+    "budget": "Cheap",
+    "hotels": [
+      {
+        "name": "Budget Inn",
+        "address": "123 Vegas Blvd, Las Vegas, NV",
+        "price": "$50 per night",
+        "image_url": "http://example.com/hotel.jpg",
+        "geo_coordinates": "36.1699, -115.1398",
+        "rating": "3 stars",
+        "description": "Affordable hotel with basic amenities."
+      }
+    ],
+    "itinerary": [
+      {
+        "day": "Day 1",
+        "plan": [
+          {
+            "time": "Morning",
+            "place": "Famous Landmark",
+            "details": "Tour the area.",
+            "geo_coordinates": "36.1700, -115.1400",
+            "ticket_pricing": "$10",
+            "time_to_travel": "2-3 hours"
+          }
+        ]
+      }
+    ],
+    "local_transportation": "Buses, rental scooters, ride-shares.",
+    "weather_info": "Dry, warm climate.",
+    "estimated_cost": {
+      "attractions": "$50",
+      "food": "$30 per day",
+      "hotel": "$150",
+      "total": "$300",
+      "transportation": "$20"
+    }
+  }
+}`
+        }
+      ]
+    }
+  ]
 });
+
+// Process the response
+const response = chatSession;
+
+// Check if the response contains the expected structure
+if (response && response.response && response.response.text) {
+  const tripDataString = response.response.text; // Extract the string containing the JSON
+  console.log("Trip Data before parsing:", tripDataString); // Log the raw string for debugging
+
+  let tripData;
+
+  try {
+    // Parse the JSON string into an object
+    tripData = JSON.parse(tripDataString);
+    console.log("Trip Data:", tripData); // Log the parsed trip data
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
+} else {
+  console.error("Unexpected response structure:", response);
+}
+
+
+
+
+
+
+
 

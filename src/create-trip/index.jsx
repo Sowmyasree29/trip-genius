@@ -29,18 +29,7 @@ function CreateTrip() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // const searchLocation = async (query) => {
-  //   if (query) {
-  //     try {
-  //       const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
-  //       const data = await response.json();
-  //       setSearchResults(data);
-  //       setShowDropdown(true);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // };
+
   let debounceTimeout;
 
 const searchLocation = async (query) => {
@@ -84,155 +73,88 @@ const searchLocation = async (query) => {
   }, [formData]);
 
 
+const generateHandler = async (e) => {
+  e.preventDefault();
+  const user = localStorage.getItem("user");
+  if (!user) {
+    setOpenDialog(true);
+    return;
+  }
 
-  // const generateHandler = async (e) => {
-  //   e.preventDefault();
-  //   const user = localStorage.getItem("user");
-  //   if (!user) {
-  //     setOpenDialog(true);
-  //   }
+  if (!formData.location || !formData.noOfDays || !formData.budget || !formData.travelList) {
+    toast("Please enter all the details");
+    return;
+  }
 
-  //   if (!formData.location || !formData.noOfDays || !formData.budget || !formData.travelList) {
-  //     toast("Please enter all the details");
-  //     return;
-  //   }
-  //   setLoading(true);
-  //   const FINAL_PROMPT = AI_PROMPT.replace("{location}", formData.location)
-  //     .replace("{noOfDays}", formData.noOfDays)
-  //     .replace("{travelList}", formData.travelList)
-  //     .replace("{budget}", formData.budget);
-  //   const result = await chatSession.sendMessage(FINAL_PROMPT);
-  //   console.log("result is", result?.response?.text());
-  //   setLoading(false);
-  //   SaveAiTrip(result?.response?.text());
-  // };
+  setLoading(true);
 
-  // const SaveAiTrip = async (tripData) => {
-  //   setLoading(true);
-  //   const user = JSON.parse(localStorage.getItem('user'));
-  //   const docId = Date.now().toString();
+  const FINAL_PROMPT = AI_PROMPT.replace("{location}", formData.location)
+    .replace("{noOfDays}", formData.noOfDays)
+    .replace("{travelList}", formData.travelList)
+    .replace("{budget}", formData.budget);
 
-  //   try {
-  //     // If parsing fails, store tripData as a string
-  //     const parsedTripData = JSON.parse(tripData);
-  //     await setDoc(doc(db, "AITrips", docId), {
-  //       id: docId,
-  //       userSelection: formData,
-  //       tripData: parsedTripData,
-  //       userEmail: user?.email,
-  //     });
-  //     console.log("trip data", parsedTripData);
-  //   } catch (error) {
-  //     console.error("Error saving trip data:", error);
-  //     // Optionally save the tripData as a string if parsing fails
-  //     await setDoc(doc(db, "AITrips", docId), {
-  //       id: docId,
-  //       userSelection: formData,
-  //       tripData: tripData, // Save as string if parsing fails
-  //       userEmail: user?.email,
-  //     });
-  //   }
-  //   setLoading(false);
-  //   navigate('/viewTrip/' + docId);
-  // };
-  const generateHandler = async (e) => {
-    e.preventDefault();
-    const user = localStorage.getItem("user");
-    if (!user) {
-      setOpenDialog(true);
-    }
-
-    if (!formData.location || !formData.noOfDays || !formData.budget || !formData.travelList) {
-      toast("Please enter all the details");
-      return;
-    }
-    setLoading(true);
-    const FINAL_PROMPT = AI_PROMPT.replace("{location}", formData.location)
-      .replace("{noOfDays}", formData.noOfDays)
-      .replace("{travelList}", formData.travelList)
-      .replace("{budget}", formData.budget);
-    
+  try {
     const result = await chatSession.sendMessage(FINAL_PROMPT);
-    
-   
-    const tripData = result?.response?.text();
-    
-    console.log("result is", tripData);
+    console.log("Raw result:", result);
+
+    let tripData;
+    if (typeof result === 'string') {
+      tripData = JSON.parse(result); // Assuming the result is a JSON string
+    } else if (typeof result === 'object') {
+      tripData = result; // If it's already an object
+    } else {
+      throw new Error("Unexpected response format");
+    }
+
+    // Ensure tripData contains hotels
+    if (!tripData.response?.candidates?.length) {
+      throw new Error("No hotels found in trip data");
+    }
+
+    await SaveAiTrip(tripData);
+  } catch (error) {
+    console.error("Error generating trip data:", error.message);
+    toast(error.message);  // Show the error to the user
+  } finally {
     setLoading(false);
-    SaveAiTrip(tripData);
+  }
+
 };
+
 const SaveAiTrip = async (tripData) => {
   setLoading(true);
   const user = JSON.parse(localStorage.getItem('user'));
   const docId = Date.now().toString();
 
   try {
-      console.log("Trip Data before parsing:", tripData);
-      
-    
-      const parsedTripData = typeof tripData === 'string' ? JSON.parse(tripData) : tripData;
-     
-      await setDoc(doc(db, "AITrips", docId), {
-          id: docId,
-          userSelection: formData,
-          tripData: parsedTripData,
-          userEmail: user?.email,
-      });
-      console.log("trip data", parsedTripData);
-  } catch (error) {
-      console.error("Error saving trip data:", error);
-    
-      console.error("Raw trip data:", tripData);
+    console.log("Trip Data before parsing:", tripData);
 
-     
-    
+    // Safely extract the data you want to save
+    const { response } = tripData;
+    const sanitizedResponse = {
+      candidates: response.candidates,
+      usageMetadata: response.usageMetadata,
+      text: typeof response.text === 'function' ? response.text() : response.text, // Call the function if it's a function
+    };
+
+    await setDoc(doc(db, "AITrips", docId), {
+      id: docId,
+      userSelection: formData,
+      tripData: {
+        response: sanitizedResponse // Only save sanitized response
+      },
+      userEmail: user?.email,
+    });
+    console.log("trip data", sanitizedResponse);
+  } catch (error) {
+    console.error("Error saving trip data:", error);
+    console.error("Raw trip data:", tripData);
   }
   setLoading(false);
   navigate('/viewTrip/' + docId);
 };
 
-// const SaveAiTrip = async (tripData) => {
-//   setLoading(true);
-//   const user = JSON.parse(localStorage.getItem('user'));
-//   const docId = Date.now().toString();
-
-//   try {
-//       console.log("Trip Data before parsing:", tripData);
-
-//       let parsedTripData;
-
-//       try {
-//           parsedTripData = typeof tripData === 'string' ? JSON.parse(tripData) : tripData;
-//       } catch (parseError) {
-//           console.error("Error parsing trip data:", parseError);
-//           console.error("Raw trip data:", tripData);
-//           console.error("Trip data length:", tripData.length); // Log the length of the data
-//           parsedTripData = {}; // Fallback to an empty object
-//       }
-
-//       await setDoc(doc(db, "AITrips", docId), {
-//           id: docId,
-//           userSelection: formData,
-//           tripData: parsedTripData,
-//           userEmail: user?.email,
-//       });
-//       console.log("trip data saved", parsedTripData);
-//   } catch (error) {
-//       console.error("Error saving trip data:", error);
-//       await setDoc(doc(db, "AITrips", docId), {
-//           id: docId,
-//           userSelection: formData,
-//           tripData: typeof tripData === 'string' ? tripData : JSON.stringify(tripData),
-//           userEmail: user?.email,
-//       });
-//   }
-//   setLoading(false);
-//   navigate('/viewTrip/' + docId);
-// };
-
-
-
-
+    
   const login = useGoogleLogin({
     onSuccess: (codeResp) => GetUserProfile(codeResp),
     onError: (error) => console.log(error),
